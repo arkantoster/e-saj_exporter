@@ -1,0 +1,17 @@
+{
+  "name": "e-saj_exporter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "carlos.junior",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "axios-retry": "^3.1.8",
+    "dotenv": "^8.2.0",
+    "jquery": "^3.5.1",
+    "jsdom": "^16.4.0",
+    "moment": "^2.27.0",
+    "ora": "^5.0.0",
+    "pg": "^8.3.3"
+  }
+}
