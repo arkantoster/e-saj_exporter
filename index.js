@@ -21,7 +21,7 @@ const pgclient = new Client({
 	port: process.env.DB_PORT,
 })
 
-const logfile = `${moment().format('YY-MM-DD-HH-mm-ss')}_esajexporter.log`;
+const logfile = `./logs/${moment().format('YY-MM-DD-HH-mm-ss')}_esajexporter.log`;
 
 axiosRetry(axios, {
 	retries: 10, retryDelay: (retryCount) => {
