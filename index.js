@@ -3,6 +3,7 @@ require('dotenv').config();
 const axios = require('axios');
 const log = require('./services/log');
 const requisicao = require('./services/requisicao');
+const biscoito = require('./services/biscoito');
 const spinner = require('./services/terminalSpinner');
 
 const { JSDOM } = require('jsdom');
@@ -33,27 +34,9 @@ const index = async () => {
 
 	log('Processo iniciado');
 
-	let totalProcessos;
-	let cookies;
+	await biscoito();
 
-	spinner.new("Conectando ao e-SAJ...");
-	try {
-		let res = await axios({
-			method: 'GET',
-			url: process.env.REQUEST_URL,
-		});
-		let asd = $(res.data).find('td:contains("Resultados")[bgcolor="#EEEEEE"]');
-		totalProcessos = $(asd[0]).html().replace(/\D/g, '').substring(3);
-		if (totalProcessos === '') totalProcessos = 10;
-		cookies = res.headers['set-cookie'];
-		spinner.concludes('Conectado ao e-SAJ');
-	} catch (error) {
-		await log(`Erro ao conectar ao e-SAJ: ${error}`);
-		spinner.concludes('Não foi possível conectar ao e-SAJ', 'fail');
-		process.exit();
-	}
-
-	spinner.info(`${totalProcessos} processos foram encontrados`);
+	spinner.info(`${global.totalProcessos} processos foram encontrados`);
 
 	spinner.new("Conectando à base de dados...");
 	try {
@@ -65,13 +48,13 @@ const index = async () => {
 		process.exit();
 	}
 
-	for (let i = 1; i <= Math.ceil(totalProcessos / 10); i++) {
+	for (let i = 1; i <= Math.ceil(global.totalProcessos / 10); i++) {
 
 		let dados;
 
 		spinner.new(`Requisitando pg. ${i}...`);
 		try {
-			dados = await requisicao(i, cookies);
+			dados = await requisicao(i, global.cookies);
 			spinner.concludes(`Requisição pg. ${i} concluída`);
 		} catch (error) {
 			await log(`Erro ao fazer requisição na pg. ${i}: ${error}`);
