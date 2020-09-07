@@ -72,8 +72,9 @@ const index = async () => {
 		} else {
 			log('escrevendo resultado');
 			spinner.new('Gravando dados...');
+			let j;
 			try {
-				for (let j = 0; j < dados.length; j++)
+				for (j = 0; j < dados.length; j++)
 					await pgclient.query('INSERT INTO public.esaj (nr_processo, assunto, classe, magistrado, comarca, foro, vara, dataDisponibilizacao, sentenca) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (nr_processo) DO NOTHING', dados[j]);
 				spinner.concludes('Dados gravados.');
 				log('resultado escrito');
