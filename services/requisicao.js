@@ -18,18 +18,18 @@ axiosRetry(axios, {
 	}
 });
 
-requisicao = async (page, Cookie) => {
+const requisicao = async (page, Cookie) => {
 
 	let res = await axios({
-		method: 'get',
+		method: 'GET',
 		url: `https://esaj.tjsp.jus.br/cjpg/trocarDePagina.do?pagina=${page}`,
 		headers: { Cookie }
 	});
 
 	let html = res.data;
 
-	html = html.slice(html.indexOf("<div id=\"divDadosResultado\" >"), -1);
-	html = html.slice(0, html.indexOf("</td>\n\t\t<td width=\"20px\">"));
+	html = html.slice(html.indexOf('<div id=\"divDadosResultado\" >'), -1);
+	html = html.slice(0, html.indexOf('</td>\n\t\t<td width=\"20px\">'));
 	html = html.replace(/<</g, '');
 	html = html.replace(/>>/g, '');
 	html = html.replace(/\t/g, '');

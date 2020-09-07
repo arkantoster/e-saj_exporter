@@ -39,7 +39,7 @@ const index = async () => {
 
 	spinner.info(`${global.totalProcessos} processos foram encontrados`);
 
-	spinner.new("Conectando à base de dados...");
+	spinner.new('Conectando à base de dados...');
 	try {
 		await pgclient.connect();
 		spinner.concludes('Conectado à base de dados');
@@ -70,15 +70,16 @@ const index = async () => {
 				process.exit()
 			}
 		} else {
-		log('escrevendo resultado');
-		spinner.new(`Gravando dados...`);
-		try {
-			for (let j = 0; j < dados.length; j++)
-				await pgclient.query(`INSERT INTO public.esaj (nr_processo, assunto, classe, magistrado, comarca, foro, vara, dataDisponibilizacao, sentenca) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (nr_processo) DO NOTHING`, dados[j]);
-			spinner.concludes('Dados gravados.');
-			log('resultado escrito');
-		} catch (error) {
-			await log(`Erro ao gravar linha ${j} da pg. ${i}: ${error}`);
+			log('escrevendo resultado');
+			spinner.new('Gravando dados...');
+			try {
+				for (let j = 0; j < dados.length; j++)
+					await pgclient.query('INSERT INTO public.esaj (nr_processo, assunto, classe, magistrado, comarca, foro, vara, dataDisponibilizacao, sentenca) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (nr_processo) DO NOTHING', dados[j]);
+				spinner.concludes('Dados gravados.');
+				log('resultado escrito');
+			} catch (error) {
+				await log(`Erro ao gravar linha ${j} da pg. ${i}: ${error}`);
+				spinner.concludes('Não foi possível gravar todos os dados', 'fail');
 			}
 		}
 	};
@@ -88,4 +89,3 @@ const index = async () => {
 }
 
 index();
-

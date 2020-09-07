@@ -8,7 +8,7 @@ const $ = require('jquery')(window);
 
 const biscoito = async () => {
 	global.biscoito += 1;
-	spinner.new("Conectando ao e-SAJ...");
+	spinner.new('Conectando ao e-SAJ...');
 	try {
 		let res = await axios({
 			method: 'GET',
