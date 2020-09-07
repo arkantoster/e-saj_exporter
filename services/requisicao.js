@@ -26,11 +26,6 @@ requisicao = async (page, Cookie) => {
 		headers: { Cookie }
 	});
 
-	if (res.data === "") {
-		spinner.concludes(`Não foi possivel carregar a pg. ${page}`, 'fail');
-		throw error(res);
-	}
-
 	let html = res.data;
 
 	html = html.slice(html.indexOf("<div id=\"divDadosResultado\" >"), -1);
@@ -83,6 +78,11 @@ requisicao = async (page, Cookie) => {
 
 		retorno.push(subAux);
 	});
+
+	if (retorno.length === 0) {
+		spinner.concludes(`Não foi possivel carregar a pg. ${page}`, 'fail');
+		throw error(res);
+	}
 
 	return retorno;
 }

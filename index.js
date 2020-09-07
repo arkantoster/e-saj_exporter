@@ -34,6 +34,7 @@ const index = async () => {
 
 	log('Processo iniciado');
 
+	global.biscoito = 0;
 	await biscoito();
 
 	spinner.info(`${global.totalProcessos} processos foram encontrados`);
@@ -50,7 +51,7 @@ const index = async () => {
 
 	for (let i = 1; i <= Math.ceil(global.totalProcessos / 10); i++) {
 
-		let dados;
+		let dados = [];
 
 		spinner.new(`Requisitando pg. ${i}...`);
 		try {
@@ -58,9 +59,17 @@ const index = async () => {
 			spinner.concludes(`Requisição pg. ${i} concluída`);
 		} catch (error) {
 			await log(`Erro ao fazer requisição na pg. ${i}: ${error}`);
-			spinner.concludes(`Não foi possível concluir a requisição na pg. ${i}`, 'fail');
 		}
 
+		if (dados.length === 0) {
+			i -= 1;
+			spinner.info('Não há dados a serem gravados, vamos atualizar os Cookies.');
+			try {
+				await biscoito();
+			} catch (error) {
+				process.exit()
+			}
+		} else {
 		log('escrevendo resultado');
 		spinner.new(`Gravando dados...`);
 		try {
@@ -70,9 +79,8 @@ const index = async () => {
 			log('resultado escrito');
 		} catch (error) {
 			await log(`Erro ao gravar linha ${j} da pg. ${i}: ${error}`);
-			spinner.concludes(`Não foi possível gravar todos os dados`, 'fail');
+			}
 		}
-
 	};
 
 	await pgclient.end();
